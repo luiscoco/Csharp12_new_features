@@ -34,6 +34,26 @@ For record types (class or struct), primary constructor parameters automatically
 
 For non-record classes or structs, primary constructor parameters are NOT automatically properties (unless you explicitly declare them).
 
+**When should you use Primary Constructors?**
+
+a) For concise type definitions, reducing boilerplate code.
+
+b) Clearly declaring required parameters for type initialization.
+
+c) Keeping class/struct definitions readable and maintainable.
+
+**Summary and Benefits of Primary Constructors in C# 12**:
+
+a) Conciseness: Reduces boilerplate significantly.
+
+b) Clarity: Clearly defines what is required to create instances.
+
+c) Maintainability: Improves readability, especially in simple type definitions.
+
+d)|Flexibility: Available for all class and struct types (not just records).
+
+Primary constructors greatly simplify the definition of simple classes and structs, streamlining object initialization and making your code more expressive and clear.
+
 ### 1.1. Example 1: Primary Constructor in a Non-record Class
 
 ```csharp
