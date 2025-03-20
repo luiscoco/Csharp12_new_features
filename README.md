@@ -548,6 +548,73 @@ class Program
 
 ## 5. Alias any type
 
+Previously, **before C# 12**, the using alias directive was limited to **named types**. You couldn't create aliases directly for tuple types, arrays, pointers, or unsafe types.
+
+With **C# 12**, this restriction is removed. You can now create semantic aliases for any type, including:
+
+Tuple types
+
+Array types
+
+Pointer types (unsafe)
+
+Other complex or unnamed types
+
+**Basic Syntax**:
+
+```csharp
+using MyPoint = (int X, int Y);
+using StringArray = string[];
+using IntPointer = int*; // unsafe context required
+```
+
+**Key Benefits and Uses**:
+
+a) Improved readability: Give semantic meaning to complex types.
+
+b) Simpler refactoring: Easy to manage type changes from a single alias declaration.
+
+c) Consistency: Use meaningful type names instead of repeating complex definitions.
+
+### 5.1. Example 1: Aliasing Tuple Types
+
+```csharp
+using System;
+
+// Tuple type alias:
+using Coordinate = (double Latitude, double Longitude);
+
+class Program
+{
+    static void Main()
+    {
+        Coordinate location = (34.0522, -118.2437); // Los Angeles
+
+        Console.WriteLine($"Latitude: {location.Latitude}");
+        Console.WriteLine($"Longitude: {location.Longitude}");
+    }
+}
+```
+
+### 5.2.  Example 2: Aliasing Array Types
+
+```csharp
+using System;
+
+// Array type alias:
+using IntArray = int[];
+
+class Program
+{
+    static void Main()
+    {
+        IntArray numbers = [1, 2, 3, 4, 5];
+
+        Console.WriteLine(string.Join(", ", numbers));
+    }
+}
+```
+### 5.3. 
 
 
 
