@@ -1,6 +1,6 @@
 # C# 12 New Features Samples 
 
-## (.NET 8 and Visual Studio 2022 version 17.8) 
+.NET 8 and Visual Studio 2022 version 17.8
 
 For more information abuot this post visit this web page:
 
