@@ -720,8 +720,95 @@ b) Performance optimized: Similar performance to unsafe fixed buffers, but safer
 
 c) Transparent usage: Can be indexed (buffer[i]) and iterated like normal arrays.
 
+**Performance Considerations & Compiler Optimizations**:
 
+a) Inline arrays give the compiler explicit knowledge of size at compile-time.
 
+b) Compiler may optimize allocations and indexing more effectively compared to dynamic arrays.
+
+c) Avoids heap allocation, maintaining data on the stack for better cache locality and performance.
+
+**When to use Inline Arrays**:
+
+b) When you need fixed-size, performance-oriented buffers with safer semantics than unsafe fixed-size buffers.
+
+c) In high-performance scenarios (runtime internals, library development, game engines, mathematical computations).
+
+**Limitations & Considerations**:
+
+a) Inline arrays are fixed-size; cannot dynamically resize.
+
+b) Typically struct-based, best suited for performance-sensitive stack scenarios.
+
+c) Be cautious of large inline arrays, as they increase stack size and may impact performance negatively.
+
+**Summary & Benefits of Inline Arrays (C# 12)**:
+
+a) High performance: Similar speed to unsafe fixed-size buffers.
+
+b) Safety & clarity: No unsafe context needed.
+
+c) Transparent and simple usage: Easily indexed and iterable.
+
+Inline arrays represent a safe, efficient, and performant alternative for fixed-size buffer scenarios, primarily enhancing libraries and performance-critical code.
+
+### 6.1. Example 1: Declaring and Using an Inline Array Struct
+
+```csharp
+using System;
+using System.Runtime.CompilerServices;
+
+[InlineArray(5)]
+public struct FixedBuffer
+{
+    private int _element0;
+}
+
+class Program
+{
+    static void Main()
+    {
+        var buffer = new FixedBuffer();
+
+        // Assign values (indexed access)
+        for (int i = 0; i < 5; i++)
+            buffer[i] = (i + 1) * 10;
+
+        // Iterate and display values
+        foreach (var value in buffer)
+            Console.WriteLine(value);
+    }
+}
+```
+
+### 6.2. Example 2: Inline Arrays and Span<T>
+
+```csharp
+using System;
+using System.Runtime.CompilerServices;
+
+[InlineArray(3)]
+public struct InlinePoint
+{
+    private double _element0;
+}
+
+class Program
+{
+    static void Main()
+    {
+        InlinePoint point = new();
+
+        Span<double> coordinates = point; // Implicit conversion to Span<double>
+
+        coordinates[0] = 1.5;
+        coordinates[1] = 3.2;
+        coordinates[2] = 4.7;
+
+        Console.WriteLine($"Coordinates: {string.Join(", ", coordinates)}");
+    }
+}
+```
 
 ## 7. Experimental attribute
 
