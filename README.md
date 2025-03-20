@@ -140,8 +140,146 @@ class Program
 
 ## 2. Collection expressions
 
+In **C# 12**, Collection Expressions introduce concise and expressive **syntax for creating common collection types** like arrays, lists, and spans directly with minimal verbosity.
 
+**Previously**, to create collections, you wrote:
 
+```csharp
+int[] numbers = new int[] { 1, 2, 3 };
+List<string> names = new List<string> { "John", "Alice" };
+Span<char> chars = new char[] { 'a', 'b', 'c' };
+```
+
+**Now with C# 12**, you can write them more concisely with collection expressions:
+
+```csharp
+int[] numbers = [1, 2, 3];
+List<string> names = ["John", "Alice"];
+Span<char> chars = ['a', 'b', 'c'];
+```
+
+**Key points about Collection Expressions**:
+
+a) Supports **inline initialization** with simple syntax ([element1, element2, ...]).
+
+b) Supports multiple collection types out-of-the-box:
+
+**Arrays** (int[], string[], etc.)
+**Lists** (List<T>)
+**Spans** (Span<T>, ReadOnlySpan<T>)
+
+c) **Spread operator (..)** allows merging collections concisely.
+
+**Summary of Collection Expressions (C# 12)**:
+
+a) Clear, concise syntax for **collection creation**:
+
+```csharp
+int[] nums = [1, 2, 3];            // Arrays
+List<string> list = ["a", "b"];    // Lists
+Span<char> span = ['x', 'y'];      // Spans
+```
+
+b) **Spread operator (..)** to merge collections:
+
+```csharp
+int[] merged = [..arr1, ..arr2];
+```
+
+c) Flexible usage as arguments, initializers, etc.
+
+C# 12's collection expressions streamline the creation of common collection types, making your code concise, readable, and efficient.
+
+### 2.1. Example 1: Basic Usage (Array, List, Span)
+
+```csharp
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        // Creating an array using collection expression
+        int[] numbers = [1, 2, 3, 4, 5];
+        Console.WriteLine($"Array: {string.Join(", ", numbers)}");
+
+        // Creating a List using collection expression
+        List<string> fruits = ["Apple", "Banana", "Cherry"];
+        Console.WriteLine($"List: {string.Join(", ", fruits)}");
+
+        // Creating a Span using collection expression
+        Span<char> letters = ['X', 'Y', 'Z'];
+        Console.WriteLine($"Span: {letters.ToString()}");
+    }
+}
+```
+
+### 2.2. Example 2: Jagged Arrays
+
+```csharp
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        // Create jagged 2D array directly
+        int[][] matrix =
+        [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ];
+
+        // Display jagged array
+        for (int i = 0; i < matrix.Length; i++)
+        {
+            Console.WriteLine($"Row {i}: {string.Join(", ", matrix[i])}");
+        }
+    }
+}
+```
+
+### 2.3. Example 3: Using Spread Operator (..)
+
+```csharp
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        int[] first = [1, 2, 3];
+        int[] second = [4, 5];
+        int[] third = [6, 7, 8, 9];
+
+        // Merge multiple arrays into one using spread operator
+        int[] mergedArray = [.. first, .. second, .. third];
+
+        Console.WriteLine($"Merged Array: {string.Join(", ", mergedArray)}");
+    }
+}
+```
+
+### 2.4. Example 4: Collection Expressions in Method Calls
+
+```csharp
+using System;
+
+class Program
+{
+    static void PrintItems(IEnumerable<string> items)
+    {
+        foreach (var item in items)
+            Console.WriteLine($"Item: {item}");
+    }
+
+    static void Main()
+    {
+        PrintItems(["Laptop", "Tablet", "Smartphone"]);
+    }
+}
+```
 
 
 ## 3. ref readonly parameters
