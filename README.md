@@ -431,10 +431,120 @@ class Program
 
 ## 4. Default lambda parameters
 
+**Before C# 12**, if you wanted a **lambda expression** with **default parameter values**, you needed to use methods or local functions, since lambda parameters didn't support defaults directly.
 
+Now, **with C# 12**, you can clearly and concisely define default parameter values directly in lambda expressions, exactly like methods or local functions:
 
+New syntax:
 
+```csharp
+var lambda = (int x, int y = 10) => x + y;
+```
 
+Here, y has a default value (10), so callers can omit it if desired.
+
+**Key points about Default Lambda Parameters**:
+
+The syntax matches exactly how you declare defaults in methods:
+
+```csharp
+(paramType param = defaultValue) => { ... }
+```
+
+When calling lambdas, parameters with defaults can be omitted.
+
+Greatly simplifies certain scenarios, avoiding unnecessary method or local function definitions.
+
+**Restrictions and rules**:
+
+Same rules apply as for methods and local functions:
+
+Default parameters must come after non-default ones.
+
+a) Correct: (int x, int y = 10)
+
+b) Incorrect: (int x = 10, int y)
+
+You cannot skip parameters without naming them explicitly.
+
+**When should you use default lambda parameters?**
+
+a) Simplifying callback logic with optional parameters.
+
+b) Reducing the number of overloaded lambdas.
+
+c) Improving readability and maintainability in functional-style code (LINQ, event handling, delegates).
+
+**Summary & Benefits of Default Lambda Parameters (C# 12)**:
+
+a) Concise syntax: Simple inline definitions of optional parameters.
+
+b) Improved readability: Clearly indicates optional/defaulted behavior.
+
+c) Simpler lambdas: Reduces the need for explicit methods or local functions.
+
+This feature greatly simplifies many scenarios where lambdas previously required complex or verbose patterns, providing clear, concise, and expressive code.
+
+### 4.1. Example 1: Basic usage of default lambda parameters
+
+```csharp
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        // Lambda expression with default parameters
+        var multiply = (int x, int y = 2) => x * y;
+
+        Console.WriteLine(multiply(5));      // y defaults to 2 → 5 * 2 = 10
+        Console.WriteLine(multiply(5, 4));   // 5 * 4 = 20
+    }
+}
+```
+
+### 4.2. Example 2: Multiple default parameters
+
+```csharp
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        var greet = (string name = "User", string greeting = "Hello") 
+            => $"{greeting}, {name}!";
+
+        Console.WriteLine(greet());                       // Hello, User!
+        Console.WriteLine(greet("Alice"));                // Hello, Alice!
+        Console.WriteLine(greet("Bob", "Welcome"));       // Welcome, Bob!
+    }
+}
+```
+
+### 4.3. Example 3: Using lambdas with LINQ and defaults
+
+```csharp
+using System;
+using System.Linq;
+
+class Program
+{
+    static void Main()
+    {
+        var numbers = Enumerable.Range(1, 5); // {1,2,3,4,5}
+
+        // Lambda with default parameter to define multiplication factor
+        Func<int, int, int> multiplier = (n, factor = 10) => n * factor;
+
+        var resultWithDefault = numbers.Select(n => multiplier(n));
+        var resultWithCustom = numbers.Select(n => multiplier(n, 3));
+
+        Console.WriteLine($"With default factor: {string.Join(", ", resultWithDefault)}");
+        Console.WriteLine($"With custom factor: {string.Join(", ", resultWithCustom)}");
+    }
+}
+```
 
 ## 5. Alias any type
 
