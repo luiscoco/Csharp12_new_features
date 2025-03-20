@@ -812,6 +812,70 @@ class Program
 
 ## 7. Experimental attribute
 
+In **C# 12**, the new **ExperimentalAttribute** lets **library authors** explicitly indicate that a particular type, method, or assembly is considered **experimental** and might change or be removed in future versions.
+
+When you mark something as **experimental**, the compiler will **issue clear warnings** whenever developers consume that experimental API.
+
+This helps ensure consumers clearly understand the **risks** and potential **instability** involved with using experimental features.
+
+**Key points about ExperimentalAttribute**:
+
+a) Explicit marking: Clearly marks APIs that might change or disappear.
+
+b) Compiler warnings: Developers receive explicit warnings when using experimental features.
+
+c) Applicable to:
+
+Types (classes, structs, interfaces, enums, delegates, etc.)
+
+Methods
+
+Assemblies (making all contained types experimental)
+
+### 7.1. Basic Usage Example
+
+**Step 1: Marking Experimental APIs**
+
+```csharp
+using System;
+using System.Diagnostics.CodeAnalysis;
+
+// Marking a method as experimental
+public class Calculator
+{
+    [Experimental("EXPERIMENTAL001", UrlFormat = "https://example.com/docs/experimental/{0}")]
+    public static int ExperimentalAdd(int a, int b)
+    {
+        return a + b;
+    }
+}
+```
+
+**Step 2: Consuming Experimental APIs (Compiler Warning)**
+
+When consuming the marked method:
+
+```csharp
+class Program
+{
+    static void Main()
+    {
+        int result = Calculator.ExperimentalAdd(5, 3); 
+        Console.WriteLine(result);
+    }
+}
+```
+
+**Compiler Warning issued**:
+```
+warning EXPERIMENTAL001: 'Calculator.ExperimentalAdd(int, int)' is for evaluation purposes only and is subject to change or removal in future updates.
+See: https://example.com/docs/experimental/EXPERIMENTAL001
+```
+
+### 7.2.
+
+
+### 7.3. 
 
 
 
