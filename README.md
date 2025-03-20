@@ -1,8 +1,11 @@
-# Csharp 12 New Features Samples
+# Csharp 12 New Features Samples (.NET 8 and Visual Studio 2022 version 17.8) 
+
 
 For more information abuot this post visit this web page:
 
 https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12
+
+https://github.com/dotnet/csharplang/blob/main/Language-Version-History.md
 
 ## 1. Primary constructors
 
