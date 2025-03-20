@@ -8,6 +8,8 @@ https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12
 
 https://github.com/dotnet/csharplang/blob/main/Language-Version-History.md
 
+https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/
+
 ## 1. Primary constructors
 
 **Before C# 12**, primary constructors were limited to **record types** (e.g., record Person(string Name)), providing concise syntax for parameter declarations and initialization.
