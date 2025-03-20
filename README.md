@@ -948,7 +948,105 @@ This clearly notifies developers that all APIs within the assembly are subject t
 
 ## 8. Interceptors
 
+**Interceptors** are a new experimental feature introduced in **C# 12** that allows you, through a source generator, to declaratively **substitute calls to existing methods with calls to your own interceptor methods at compile time**.
 
+In other words, Interceptors let you **modify existing code behavior without directly changing the original source**.
+
+This can be very useful in advanced scenarios such as **instrumentation**, **logging**, **debugging**, **metrics** collection, or **dynamic modifications** of API behavior at compile-time.
+
+**Key Points & Warnings**:
+
+a) Experimental Feature: Not recommended yet for production use; subject to breaking changes or removal.
+
+b) Compile-time Substitution: Interceptors replace calls during compilation, with no runtime overhead for the substitution itself.
+
+c) Declarative Replacement: Your interceptor declares explicitly which methods it intercepts.
+
+d) Requires explicitly listing namespaces containing interceptors via:
+
+```xml
+<InterceptorsPreviewNamespaces>
+    $(InterceptorsPreviewNamespaces);YourNamespace.Generated
+</InterceptorsPreviewNamespaces>
+(typically in your .csproj file)
+```
+
+### 8.1. Practical Example (Simple Logging Interceptor)
+
+**Step 1: Original Method**
+
+You have an existing method:
+
+```csharp
+// Original library method you want to intercept:
+namespace MyLibrary
+{
+    public static class MathOperations
+    {
+        public static int Add(int a, int b) => a + b;
+    }
+}
+```
+
+**Step 2: Creating the Interceptor (via Source Generator)**
+
+Interceptors must be defined via source generators. Here's a simplified example using the correct interceptor pattern:
+
+```csharp
+
+// Interceptor defined by a source generator:
+using System.Runtime.CompilerServices;
+
+namespace MyLibrary.Generated
+{
+    public static class MathOperationsInterceptor
+    {
+        [InterceptsLocation(
+            filePath: "Program.cs",
+            line: 9,
+            column: 24)]
+        public static int AddInterceptor(int a, int b)
+        {
+            Console.WriteLine($"Intercepted Add({a}, {b})");
+            var result = MyLibrary.MathOperations.Add(a, b);
+            Console.WriteLine($"Result: {result}");
+            return result;
+        }
+    }
+}
+```
+
+Explanation of **[InterceptsLocation]**: filePath, line, and column explicitly indicate the source location of the original call to be intercepted.
+
+Your interceptor is called instead of the original method at compile time.
+
+**Step 3: Using the Original Method (will be intercepted)**
+
+Consider you have this usage in Program.cs (matching the interceptor):
+
+```csharp
+// Program.cs
+using System;
+using MyLibrary;
+
+class Program
+{
+    static void Main()
+    {
+        int sum = MathOperations.Add(5, 10); // Intercepted here!
+        Console.WriteLine($"Sum: {sum}");
+    }
+}
+```
+
+**Output (at runtime after interception)**:
+```
+Intercepted Add(5, 10)
+Result: 15
+Sum: 15
+```
+
+The call to **MathOperations.Add** in your original source is transparently **replaced by** your **interceptor at compile time**.
 
 
 
