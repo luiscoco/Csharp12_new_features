@@ -686,7 +686,39 @@ class Program
 
 ## 6. Inline arrays
 
+Inline arrays are a new **C# 12** feature designed primarily for **advanced performance optimization scenarios**. 
 
+They allow **defining fixed-size arrays** directly **within struct types**, providing performance similar to unsafe fixed-size buffers, but with safer, clearer semantics.
+
+**Who uses inline arrays?**
+
+Primarily used by runtime developers, library authors, or performance-critical application developers.
+
+Most application developers typically consume inline arrays (via Span<T> or ReadOnlySpan<T>), rather than defining them directly.
+
+**What do inline arrays look like?**
+
+Inline arrays are declared by annotating a struct with [InlineArray(N)], specifying the array size:
+
+```csharp
+[System.Runtime.CompilerServices.InlineArray(10)]
+public struct Buffer
+{
+    private int _element0; // Compiler automatically generates the rest
+}
+```
+
+**_element0** is required for type inference.
+
+The **compiler auto-generates additional elements** (_element1, _element2, ...) transparently, matching the declared size (10 in this example).
+
+**Key characteristics of Inline Arrays**:
+
+a) Fixed size: Defined at compile-time via attribute.
+
+b) Performance optimized: Similar performance to unsafe fixed buffers, but safer and clearer.
+
+c) Transparent usage: Can be indexed (buffer[i]) and iterated like normal arrays.
 
 
 
