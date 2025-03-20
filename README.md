@@ -971,6 +971,38 @@ d) Requires explicitly listing namespaces containing interceptors via:
 (typically in your .csproj file)
 ```
 
+**When to Use Interceptors**:
+
+a) Instrumentation & Logging: Add logging, tracing, or performance monitoring transparently.
+
+b) Metrics & Telemetry: Automatically add telemetry around method calls without modifying original code.
+
+c) Testing & Mocking: Substitute method calls with mocks/stubs transparently during tests.
+
+d) Dynamic Code Modification: Adjust behavior without changing original source (ideal in legacy scenarios).
+
+**Limitations & Recommendations**:
+
+a) Experimental: Feature might change or be removed. Do not yet use in production.
+
+b) Explicit & cautious use: Clearly document interceptor behavior. Use sparingly to avoid confusion.
+
+c) Source location dependent: Changes in source files (lines or columns) could invalidate interception.
+
+**Summary of Interceptors (C# 12 experimental)**:
+
+a) Declarative substitution of method calls at compile-time.
+
+b) Transparent modification of existing code behavior (no runtime overhead).
+
+c) Ideal for logging, metrics, instrumentation, and testing scenarios.
+
+d) Experimental: clearly understand risks.
+
+Interceptors give developers powerful capabilities to transparently modify existing code during compilation, significantly simplifying advanced scenarios. 
+
+However, given its experimental nature, proceed with caution.
+
 ### 8.1. Practical Example (Simple Logging Interceptor)
 
 **Step 1: Original Method**
@@ -1048,5 +1080,20 @@ Sum: 15
 
 The call to **MathOperations.Add** in your original source is transparently **replaced by** your **interceptor at compile time**.
 
+**Setup & Configuration (Important)**:
 
+To **use interceptors**, you must explicitly **enable interceptor namespaces** in your **.csproj file**:
+
+```xml
+<PropertyGroup>
+    <LangVersion>preview</LangVersion> <!-- Required: preview language -->
+    <InterceptorsPreviewNamespaces>
+        $(InterceptorsPreviewNamespaces);MyLibrary.Generated
+    </InterceptorsPreviewNamespaces>
+</PropertyGroup>
+```
+
+This explicitly allows interceptors in **MyLibrary.Generated** namespace.
+
+Interceptors are strictly controlled to avoid unintended replacements or confusion.
 
