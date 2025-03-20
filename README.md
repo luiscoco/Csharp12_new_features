@@ -832,6 +832,32 @@ Methods
 
 Assemblies (making all contained types experimental)
 
+**When should you use ExperimentalAttribute?**
+
+a) Clearly marking new APIs still under evaluation.
+
+b) Signaling explicitly that APIs might change or disappear in future releases.
+
+c) Preventing accidental reliance on unstable APIs without explicit acknowledgment.
+
+**Best Practices & Recommendations**:
+
+a) Always provide clear identifiers and helpful documentation URLs within the attribute.
+
+b) Clearly document in release notes and API documentation when marking APIs as experimental.
+
+c) Limit the use of Experimental APIs publicly to prevent confusion.
+ 
+**Summary & Benefits of ExperimentalAttribute (C# 12)**:
+
+a) Clear communication: Developers immediately see risks associated with unstable features.
+
+b) Safe experimentation: Allows library authors to release early versions without creating unintended compatibility expectations.
+
+c)Encourages feedback: Developers can test and provide feedback on experimental APIs clearly.
+
+The **ExperimentalAttribute** provides a clear and explicit way for library authors to indicate APIs that are under active development and might change, ensuring a better communication and clearer understanding between library maintainers and their users.
+
 ### 7.1. Basic Usage Example
 
 **Step 1: Marking Experimental APIs**
@@ -872,14 +898,47 @@ warning EXPERIMENTAL001: 'Calculator.ExperimentalAdd(int, int)' is for evaluatio
 See: https://example.com/docs/experimental/EXPERIMENTAL001
 ```
 
-### 7.2.
+### 7.2. Example 2: Marking a Whole Assembly as Experimental
 
+You can apply ExperimentalAttribute at the assembly level, making all contained APIs experimental
 
-### 7.3. 
+```csharp
+using System.Diagnostics.CodeAnalysis;
 
+[assembly: Experimental("ASSEMBLY_EXPERIMENTAL", UrlFormat = "https://example.com/docs/experimental/{0}")]
 
+namespace ExperimentalLibrary
+{
+    public class FeatureX
+    {
+        public void DoSomething() { }
+    }
 
+    public struct ExperimentalStruct
+    {
+        public int Value { get; set; }
+    }
+}
+```
 
+When consuming anything from this assembly:
+
+```csharp
+using ExperimentalLibrary;
+
+class Program
+{
+    static void Main()
+    {
+        var feature = new FeatureX();
+        feature.DoSomething(); // ⚠️ Compiler warning: Experimental!
+
+        ExperimentalStruct es = new ExperimentalStruct(); // ⚠️ Experimental warning
+    }
+}
+```
+
+This clearly notifies developers that all APIs within the assembly are subject to change.
 
 ## 8. Interceptors
 
