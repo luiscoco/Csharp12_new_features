@@ -692,9 +692,9 @@ They allow **defining fixed-size arrays** directly **within struct types**, prov
 
 **Who uses inline arrays?**
 
-Primarily used by runtime developers, library authors, or performance-critical application developers.
+a) Primarily used by runtime developers, library authors, or performance-critical application developers.
 
-Most application developers typically consume inline arrays (via Span<T> or ReadOnlySpan<T>), rather than defining them directly.
+b) Most application developers typically consume inline arrays (via Span<T> or ReadOnlySpan<T>), rather than defining them directly.
 
 **What do inline arrays look like?**
 
@@ -730,9 +730,9 @@ c) Avoids heap allocation, maintaining data on the stack for better cache locali
 
 **When to use Inline Arrays**:
 
-b) When you need fixed-size, performance-oriented buffers with safer semantics than unsafe fixed-size buffers.
+a) When you need fixed-size, performance-oriented buffers with safer semantics than unsafe fixed-size buffers.
 
-c) In high-performance scenarios (runtime internals, library development, game engines, mathematical computations).
+b) In high-performance scenarios (runtime internals, library development, game engines, mathematical computations).
 
 **Limitations & Considerations**:
 
