@@ -281,11 +281,153 @@ class Program
 }
 ```
 
-
 ## 3. ref readonly parameters
 
+In **earlier C# versions**, you had these parameter modifiers:
 
+**ref**: Parameters passed by reference (modifiable).
 
+**in**: Parameters passed by reference but read-only. Can accept both variables and value expressions.
+
+With **C# 12**, there's a new modifier:
+
+**ref readonly**:
+
+Parameters passed by reference and explicitly read-only, but must be passed a variable (not a direct value expression).
+
+This modifier gives more clarity and precision for your APIs, specifically when:
+
+You want to ensure the argument is **passed by reference without modification**.
+
+You explicitly require the caller to pass a variable, making it clear that the method uses references (for performance) and guarantees no mutation.
+
+![image](https://github.com/user-attachments/assets/c8a3f78b-4ed8-419c-b2e4-b33874e47b82)
+
+**ref readonly** combines aspects of both **ref** (requires variable) and **in** (readonly).
+
+**When to use ref readonly parameters?**
+
+a) When you explicitly want callers to **pass variables only**, enforcing that **no temporary expressions are allowed**.
+
+b) When you want explicit clarity and performance optimization, indicating **passing by reference without allowing modification**.
+
+c) When **updating legacy APIs** (ref parameters that aren't modified) without breaking existing callers.
+
+### 3.1. Example 1: Basic usage of 'ref readonly' parameter
+
+```csharp
+using System;
+
+class Program
+{
+    static void DisplayCoordinates(ref readonly Point point)
+    {
+        Console.WriteLine($"Coordinates: ({point.X}, {point.Y})");
+        
+        // point.X = 10;  // Compiler Error! "Cannot modify ref readonly parameter"
+    }
+
+    static void Main()
+    {
+        Point p = new Point(5, 10);
+        
+        DisplayCoordinates(ref p);  // Must pass with 'ref' keyword
+    }
+}
+
+struct Point
+{
+    public int X;
+    public int Y;
+
+    public Point(int x, int y) => (X, Y) = (x, y);
+}
+```
+
+### 3.2. Example 2: Contrast with 'in' parameter
+
+```csharp
+using System;
+
+class Program
+{
+    static void MethodWithIn(in int value)
+    {
+        Console.WriteLine($"Value (in): {value}");
+    }
+
+    static void MethodWithRefReadonly(ref readonly int value)
+    {
+        Console.WriteLine($"Value (ref readonly): {value}");
+    }
+
+    static void Main()
+    {
+        int num = 42;
+
+        MethodWithIn(num);             // Can pass directly (value or variable)
+        MethodWithIn(100);             // Literal allowed
+
+        MethodWithRefReadonly(ref num); // Variable with ref keyword
+        // MethodWithRefReadonly(ref 100); Error: Literal NOT allowed
+    }
+}
+```
+
+### 3.3. Example 3: Updating existing API clearly (no breaking changes)
+
+Let's say you had a previous API using **ref** but **without modifying the parameter**:
+
+**Before (C#11 and earlier)**:
+
+```csharp
+public void ProcessData(ref int data)
+{
+    // Method never actually modifies data
+    Console.WriteLine($"Data is: {data}");
+}
+```
+
+**After C#12**, clearly expressing intent:
+
+```csharp
+public void ProcessData(ref readonly int data)
+{
+    // Explicitly guarantees data isn't modified
+    Console.WriteLine($"Data is: {data}");
+}
+```
+
+**Important**:
+
+Updating your API to use **ref readonly** doesn't cause breaking changes for existing callers, since they already **pass a variable by ref**.
+
+It clarifies intent, **preventing accidental modifications**.
+
+### 3.4. Practical Real-world scenario (Performance-oriented APIs):
+
+```csharp
+using System;
+
+class Program
+{
+    // Method that clearly states it takes a reference to a ReadOnlySpan
+    static void PrintFirstElement<T>(ref readonly ReadOnlySpan<T> span)
+    {
+        if (span.Length > 0)
+            Console.WriteLine($"First Element: {span[0]}");
+        else
+            Console.WriteLine("Span is empty");
+    }
+
+    static void Main()
+    {
+        ReadOnlySpan<int> numbers = stackalloc[] { 10, 20, 30 };
+        
+        PrintFirstElement(ref numbers);  // must pass with 'ref' keyword
+    }
+}
+```
 
 ## 4. Default lambda parameters
 
@@ -320,5 +462,3 @@ class Program
 
 
 
-
-## 4. 
